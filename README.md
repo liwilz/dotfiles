@@ -1,2 +1,2 @@
 # dotfiles
-i'm not too sure yet
+general settings + a arch install script
