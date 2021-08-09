@@ -1,0 +1,27 @@
+#!/bin/bash
+
+timedatectl set-ntp true
+mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2
+mount /dev/sda2 /mnt
+pacstrap /mnt base linux linux-lts linux-zen linux-firmware sudo nano grub efibootmgr dosfstools os-prober mtools networkmanager
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
+echo "LANG=en_US.UTF-8" > /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+hwclock --systohc --utc
+echo Arch > /etc/hostname
+echo"127.0.0.1  localhost" > /etc/hostname
+echo "::1       localhost" > /etc/hostname
+echo "127.0.1.1 Arch.localdomain Arch" > /etc/hostname
+mkinitcpio -P
+useradd -m photon
+usermod -aG wheel,audio,video,storage photon
+echo "%wheel ALL=(ALL) ALL" > /etc/sudoers.tmp
+mkdir /boot/EFI
+mount /dev/sda1 /boot/EFI
+grub-install --target=x86_64-efi --bootloader-id=grub_uefi --recheck
+grub-mkconfig -o /boot/grub/grub.cfg
+systemctl enable NetworkManager
