@@ -1,0 +1,23 @@
+truncate -s 0  /swap/swapfile
+chattr +C /swap/swapfile
+btrfs property set /swap/swapfile compression none 
+dd if=/dev/zero of=/swap/swapfile bs=1G count=6 status=progress
+chmod 600 /swap/swapfile
+mkswap /swap/swapfile
+swapon /swap/swapfile
+echo "/swap/swapfile none swap defaults 0 0" > /etc/fstab
+read -sp "install paru?" paru
+if [ $paru == y ]
+then
+    git clone https://aur.archlinux.org/paru.git
+    cd paru && makepkg -si
+fi
+cd && sudo rm -r paru
+read -sp "1. wm 2. de 3. none" gui
+if [ $gui == 1 ]
+then
+    read -sp "1. dwm 2. awesome 3. xmonad 4. bspwm 5. i3 6. "
+elif [ $gui == 2 ]
+    read -sp "1. plasma 2. gnome 3. xfce 4. lxqt"
+elif [ $gui == 3]
+    commandline

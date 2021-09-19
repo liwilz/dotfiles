@@ -1,0 +1,17 @@
+#!/bin/bash
+timedatectl set-ntp true
+cfdisk /dev/sda # gpt, 1gb /dev/sda1, all the rest /dev/sda2
+mkfs.fat -F32 /dev/sda1
+mkfs.btrfs -f /dev/sda2
+mount /dev/sda2 /mnt
+cd /mnt && btrfs su cr @ && btrfs su cr @home && btrfs su cr @var && btrfs su cr @swap && cd
+umount /mnt
+mkdir -p /mnt/{home,var,boot}
+mount -o noatime,compress=zstd,space_cache,discard=async,subvol=@ /dev/sda2 /mnt
+mount -o noatime,compress=zstd,space_cache,discard=async,subvol=@home /dev/sda2 /mnt/home
+mount -o noatime,compress=zstd,space_cache,discard=async,subvol=@var /dev/sda2 /mnt/var
+mount -o nodatacow,subvol=@swap /dev/sda2 /mnt/swap
+mount /dev/sda1 /mnt/boot
+pacstrap /mnt base linux-zen linux-firmware neovim btrfs-progs git amd-ucode
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
