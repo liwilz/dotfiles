@@ -1,0 +1,17 @@
+bibata-cursor-theme
+carbonyl-bin
+cbonsai
+espeak
+eww
+ghcup-hs-bin
+greetd-dms-greeter-git
+kanata-git
+kanata-tray-bin
+niri-scratchpad-rs-git
+paru
+paru-debug
+powerstat
+python-num2words
+rime-ice-git
+spaceship-prompt
+texlive-installer
