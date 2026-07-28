@@ -1,0 +1,10 @@
+// DMS Window Rules - Managed by DankMaterialShell
+// Do not edit manually - changes may be overwritten
+
+// @id=wr_1784983376690671036 @name=kitty
+window-rule {
+    match app-id="^kitty$"
+    open-floating true
+    default-column-width { fixed 1000; }
+    default-window-height { fixed 600; }
+}
